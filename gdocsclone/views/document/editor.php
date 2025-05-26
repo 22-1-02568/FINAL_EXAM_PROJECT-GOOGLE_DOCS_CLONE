@@ -510,7 +510,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- Share Document section BELOW the editor area -->
-                <?php if ($isEdit): ?>
                 <div id="shareSection" class="mb-6">
                     <h3 class="text-lg font-semibold mb-2">Share Document</h3>
                     <input
@@ -519,39 +518,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         placeholder="Search users by username or email..."
                         autocomplete="off"
                         class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        <?php if (!$isEdit): ?> disabled <?php endif; ?>
                     />
                     <button
                         type="button"
                         id="shareBtn"
                         class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-200 flex items-center"
-                        disabled
+                        <?php if (!$isEdit): ?> disabled <?php endif; ?>
                     >
                         <i class="fas fa-paper-plane mr-2"></i> Share
                     </button>
                     <div id="userResults" class="mt-4"></div>
                     <div id="shareMessage" class="mt-2 text-sm"></div>
+                    <?php if (!$isEdit): ?>
+                        <p class="text-gray-500 mt-2">Please save the document to enable sharing.</p>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
             </div>
 
             <!-- Chat & Activity Sidebar (right) -->
-            <?php if ($isEdit): ?>
             <aside>
-                <a href="messages.php?document_id=<?php echo $_GET['id']; ?>" title="Chat">
+                <a href="messages.php?document_id=<?php echo $isEdit ? intval($_GET['id']) : 0; ?>" title="Chat" <?php if (!$isEdit): ?> class="opacity-50 pointer-events-none" <?php endif; ?>>
                     <i class="fas fa-comments mr-2"></i> Chat
                 </a>
-                <a href="activity.php?document_id=<?php echo $_GET['id']; ?>" title="Activity">
+                <a href="activity.php?document_id=<?php echo $isEdit ? intval($_GET['id']) : 0; ?>" title="Activity" <?php if (!$isEdit): ?> class="opacity-50 pointer-events-none" <?php endif; ?>>
                     <i class="fas fa-history mr-2"></i> Activity
                 </a>
 
                 <!-- Chat messages UI -->
-                <div id="chatMessages"></div>
-                <div id="chatInputContainer">
-                    <input type="text" id="chatInput" placeholder="Type a message..." />
-                    <button id="chatSendBtn" title="Send message"><i class="fas fa-paper-plane"></i></button>
+                <div id="chatMessages" <?php if (!$isEdit): ?> style="opacity: 0.5; pointer-events: none;" <?php endif; ?>></div>
+                <div id="chatInputContainer" <?php if (!$isEdit): ?> style="opacity: 0.5; pointer-events: none;" <?php endif; ?>>
+                    <input type="text" id="chatInput" placeholder="Type a message..." <?php if (!$isEdit): ?> disabled <?php endif; ?> />
+                    <button id="chatSendBtn" title="Send message" <?php if (!$isEdit): ?> disabled <?php endif; ?>><i class="fas fa-paper-plane"></i></button>
                 </div>
             </aside>
-            <?php endif; ?>
         </div>
     </main>
 
